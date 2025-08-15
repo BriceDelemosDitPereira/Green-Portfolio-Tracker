@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework', # Django REST framework for API support
     'green_portfolio_tracker.api', # Custom app for API endpoints
+    'corsheaders', # CORS headers for cross-origin requests
 ]
 
 REST_FRAMEWORK = {
@@ -49,6 +50,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +61,25 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'green_portfolio_tracker.urls'
+
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', # Local memory cache for development
+        # In production, consider using a more robust cache backend like Redis or Memcached
+        # 'BACKEND': 'django_redis.cache.RedisCache',
+        # 'LOCATION': 'redis://127.0.0.1:6379/1',
+        # 'OPTIONS': {
+        #     'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        # }
+    }
+}
 
 TEMPLATES = [
     {
@@ -76,18 +97,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'green_portfolio_tracker.wsgi.application'
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', # Local memory cache for development
-        # In production, consider using a more robust cache backend like Redis or Memcached
-        # 'BACKEND': 'django_redis.cache.RedisCache',
-        # 'LOCATION': 'redis://127.0.0.1:6379/1',
-        # 'OPTIONS': {
-        #     'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        # }
-    }
-}
 
 
 # Database
