@@ -1,6 +1,7 @@
 asgiref==3.9.1
 coverage==7.10.3
 Django==5.2.5
+django-cors-headers==4.7.0
 django-redis==6.0.0
 djangorestframework==3.16.1
 iniconfig==2.1.0
