@@ -10,7 +10,7 @@ class Investment(models.Model):
     def __str__(self): # Print the name of the investment
         return self.name
 
-class Portfolio(models.Model):
+class PortfolioTransaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     investment = models.ForeignKey(Investment, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
