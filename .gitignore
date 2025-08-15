@@ -6,7 +6,7 @@ __pycache__/
 *.pyc
 
 # Database files
-db.sqlite3
+*.sqlite3
 
 # Log files and environment variables
 *.log
@@ -20,3 +20,4 @@ db.sqlite3
 
 # Frontend node_modules
 node_modules/
+dist/
