@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 # Check this tests with : pytest -v green_portfolio_tracker/api/tests.py
 # -v for verbose output
 
+# pytest --cov=green_portfolio_tracker.api --cov-report=term-missing green_portfolio_tracker/api/tests.py
+# --cov for coverage report, --cov-report for the format of the report => Here we are 96% covered
+
 @pytest.fixture # Fixture is used to create reusable test data
 def client():
     return APIClient() # Fixture to provide an API client for tests

@@ -12,6 +12,9 @@ db.sqlite3
 *.log
 .env
 
+# Coverage reports
+.coverage
+
 # Visual Studio Code files
 .vscode/
 
