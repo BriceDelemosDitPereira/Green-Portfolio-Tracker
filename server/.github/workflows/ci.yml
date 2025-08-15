@@ -19,7 +19,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r server/requirements.txt
     - name: Run tests
       run: |
-        pytest green_portfolio_tracker/api/tests.py
+        export DJANGO_SETTINGS_MODULE=green_portfolio_tracker.settings
+        export PYTHONPATH=$PYTHONPATH:server
+        pytest server/green_portfolio_tracker/api/tests.py --cov=server/green_portfolio_tracker.api --cov-report=term-missing
