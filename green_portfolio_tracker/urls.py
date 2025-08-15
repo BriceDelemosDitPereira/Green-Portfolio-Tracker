@@ -1,13 +1,13 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from api.views import InvestmentViewSet, PortfolioTransactionViewSet
+from green_portfolio_tracker.api.views import InvestmentViewSet, PortfolioTransactionViewSet
 
 # Create a router and register our viewsets with it.
 # This will automatically create the URL patterns for the viewsets.
 router = DefaultRouter()
 router.register(r'investments', InvestmentViewSet)
-router.register(r'transactions', PortfolioTransactionViewSet)
+router.register(r'transactions', PortfolioTransactionViewSet, basename='transactions')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
