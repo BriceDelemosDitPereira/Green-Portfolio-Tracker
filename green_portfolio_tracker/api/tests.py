@@ -42,3 +42,8 @@ def test_transaction_summary(client, user):
     assert response.status_code == 200
     assert response.data['total_impact'] == 2000.0 # 1000 * 2.0
     assert response.data['total_performance'] == 40.0 # 1000 * (4.0 / 100)
+
+def test_unauthorized_access(client):
+    url = '/api/transactions/'
+    response = client.get(url)
+    assert response.status_code == 401 # Unauthorized access should return 401 status code
