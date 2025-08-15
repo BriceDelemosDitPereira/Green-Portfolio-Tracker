@@ -1,0 +1,19 @@
+# Virtual environment
+venv/
+
+# Python bytecode compiled files
+__pycache__/
+*.pyc
+
+# Database files
+db.sqlite3
+
+# Log files and environment variables
+*.log
+.env
+
+# Visual Studio Code files
+.vscode/
+
+# Frontend node_modules
+node_modules/
