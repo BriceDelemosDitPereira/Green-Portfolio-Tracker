@@ -50,3 +50,16 @@ def test_unauthorized_access(client):
     url = '/api/transactions/'
     response = client.get(url)
     assert response.status_code == 401 # Unauthorized access should return 401 status code
+
+@pytest.mark.django_db
+def test_invalid_investment(client, user):
+    url = '/api/investments/'
+    data = {
+        'name': 'Invalid Investment',
+        'category': 'Renewable',
+        'co2_reduction_per_unit': -1.0,  # Invalide
+        'expected_return': 5.0
+    }
+    response = client.post(url, data, format='json')
+    assert response.status_code == 400
+    assert 'co2_reduction_per_unit' in response.data
