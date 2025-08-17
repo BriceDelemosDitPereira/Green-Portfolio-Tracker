@@ -6,17 +6,11 @@ class InvestmentSerializer(serializers.ModelSerializer):
         model = Investment
         fields = ['id', 'name', 'category', 'co2_reduction_per_unit', 'expected_return']
 
-    def validate_co2_reduction_per_unit(self, value):
-        if value < 0:
-            raise serializers.ValidationError("CO2 reduction per unit must be non-negative.")
-        return value
-
-    def validate_expected_return(self, value):
-        if value < 0:
-            raise serializers.ValidationError("Expected return must be non-negative.")
-        return value
-
 class PortfolioTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PortfolioTransaction
-        fields = ['id', 'user', 'investment', 'amount', 'date']
+        fields = ['id', 'investment', 'amount', 'date']
+    
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
