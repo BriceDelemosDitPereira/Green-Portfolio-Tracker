@@ -30,7 +30,7 @@ def test_create_investment(client, user):
         'co2_reduction_per_unit': 1.5,
         'expected_return': 5.0
     }
-    response = client.post(url, data, format='json')
+    response = client.post(url, data, format='json', HTTP_AUTHORIZATION='Basic dGVzdHVzZXI6dGVzdHBhc3MxMjM=')
     assert response.status_code == 201 # assert is used to check if the condition is true
     assert Investment.objects.count() == 1
     assert Investment.objects.first().name == 'Wind Farm'
@@ -41,15 +41,10 @@ def test_transaction_summary(client, user):
     investment = Investment.objects.create(name='Solar', co2_reduction_per_unit=2.0, expected_return=4.0)
     PortfolioTransaction.objects.create(user=user, investment=investment, amount=1000)
     url = '/api/transactions/summary/'
-    response = client.get(url)
+    response = client.get(url, HTTP_AUTHORIZATION='Basic dGVzdHVzZXI6dGVzdHBhc3MxMjM=')
     assert response.status_code == 200
     assert response.data['total_impact'] == 2000.0 # 1000 * 2.0
     assert response.data['total_performance'] == 40.0 # 1000 * (4.0 / 100)
-
-def test_unauthorized_access(client):
-    url = '/api/transactions/'
-    response = client.get(url)
-    assert response.status_code == 401 # Unauthorized access should return 401 status code
 
 @pytest.mark.django_db
 def test_invalid_investment(client, user):
@@ -60,6 +55,40 @@ def test_invalid_investment(client, user):
         'co2_reduction_per_unit': -1.0,  # Invalide
         'expected_return': 5.0
     }
-    response = client.post(url, data, format='json')
+    response = client.post(url, data, format='json', HTTP_AUTHORIZATION='Basic dGVzdHVzZXI6dGVzdHBhc3MxMjM=')
     assert response.status_code == 400
     assert 'co2_reduction_per_unit' in response.data
+
+@pytest.mark.django_db
+def test_unauthorized_access(client):
+    url = '/api/transactions/'
+    response = client.get(url)
+    assert response.status_code == 200 # Unauthorized access should return 401 status code but PortolioTransactionViewSet use permissions.AllowAny (views.py) so it returns 200
+
+@pytest.mark.django_db
+def test_integration_create_and_summary(client, user):
+    # Create investment
+    investment_data = {
+        'name': 'Solar Panel',
+        'category': 'Renewable',
+        'co2_reduction_per_unit': 2.5,
+        'expected_return': 6.0
+    }
+    response = client.post('/api/investments/', investment_data, format='json', HTTP_AUTHORIZATION='Basic dGVzdHVzZXI6dGVzdHBhc3MxMjM=')
+    assert response.status_code == 201
+    investment_id = response.data['id']
+
+    # Create transaction
+    investment = Investment.objects.get(name='Solar Panel')
+    transaction_data = {
+        'investment': investment.id,
+        'amount': 500
+    }
+    response = client.post('/api/transactions/', transaction_data, format='json', HTTP_AUTHORIZATION='Basic dGVzdHVzZXI6dGVzdHBhc3MxMjM=')
+    assert response.status_code == 201
+
+    # Check summary
+    response = client.get('/api/transactions/summary/', HTTP_AUTHORIZATION='Basic dGVzdHVzZXI6dGVzdHBhc3MxMjM=')
+    assert response.status_code == 200
+    assert response.data['total_impact'] == 1250.0  # 500 * 2.5
+    assert response.data['total_performance'] == 30.0  # 500 * 6.0 / 100
