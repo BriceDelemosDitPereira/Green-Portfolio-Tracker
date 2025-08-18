@@ -199,6 +199,10 @@ Les tests couvrent :
 - **API calls** : Intégration complète avec le backend Django
 - **Responsive design** : Interface adaptée à tous les écrans avec Tailwind CSS
 
+<p align="center">
+   <img src="client/green-portfolio-tracker-client/public/green-portfolio-traker.png" alt="Green Portfolio Tracker" alt="Green Portfolio Traker" width="500">
+</p>
+
 ## Améliorations possibles
 
 Ce projet, étant un MVP de démonstration, pourrait être enrichi par :
